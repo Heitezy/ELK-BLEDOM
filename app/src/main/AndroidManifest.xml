@@ -25,12 +25,6 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <!-- mediaProjection foreground service type (API 34+) -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION" />
-    <!-- microphone foreground service type (API 34+) -->
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE" />
-
-    <!-- Prevent device sleep and allow battery optimization ignoring -->
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
 
     <uses-feature android:name="android.hardware.bluetooth_le" android:required="true" />
 
@@ -63,10 +57,10 @@
             </intent-filter>
         </activity>
 
-        <!-- Must declare foregroundServiceType for AudioPlaybackCapture and Microphone background access -->
+        <!-- Must declare foregroundServiceType="mediaProjection" for AudioPlaybackCapture -->
         <service
             android:name=".MediaProjectionService"
-            android:foregroundServiceType="mediaProjection|microphone"
+            android:foregroundServiceType="mediaProjection"
             android:exported="false" />
 
     </application>
