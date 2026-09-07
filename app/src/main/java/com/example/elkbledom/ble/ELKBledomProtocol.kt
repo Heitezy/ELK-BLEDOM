@@ -2,6 +2,8 @@ package com.example.elkbledom.ble
 
 import java.util.UUID
 
+import com.example.elkbledom.R
+
 enum class ProtocolVariant { ELK_BLEDOM, BJ_LED }
 
 object ELKBledomProtocol {
@@ -62,18 +64,18 @@ object ELKBledomProtocol {
     }
 }
 
-enum class LedPattern(val displayName: String) {
-    SOLID        ("Solid"),
-    JUMP_RGB     ("Jump RGB"),
-    JUMP_ALL     ("Jump All"),
-    FADE_RGB     ("Fade RGB"),
-    FADE_ALL     ("Fade All"),
-    CROSSFADE_R  ("Crossfade Red"),
-    CROSSFADE_GB  ("Crossfade Green Blue"),
-    CROSSFADE_BO  ("Crossfade Blue Orange"),
-    CROSSFADE_B  ("Crossfade Blue"),
-    CROSSFADE_W  ("Crossfade White"),
-    FLASH_RGB    ("Flash RGB"),
-    FLASH_ALL    ("Flash All"),
-    STROBE_W     ("Strobe White"),
+enum class LedPattern(val displayName: String, val displayNameRes: Int) {
+    SOLID        ("Solid", R.string.pattern_solid),
+    JUMP_RGB     ("Jump RGB", R.string.pattern_jump_rgb),
+    JUMP_ALL     ("Jump All", R.string.pattern_jump_all),
+    FADE_RGB     ("Fade RGB", R.string.pattern_fade_rgb),
+    FADE_ALL     ("Fade All", R.string.pattern_fade_all),
+    CROSSFADE_R  ("Crossfade Red", R.string.pattern_crossfade_red),
+    CROSSFADE_GB  ("Crossfade Green Blue", R.string.pattern_crossfade_green_blue),
+    CROSSFADE_BO  ("Crossfade Blue Orange", R.string.pattern_crossfade_blue_orange),
+    CROSSFADE_B  ("Crossfade Blue", R.string.pattern_crossfade_blue),
+    CROSSFADE_W  ("Crossfade White", R.string.pattern_crossfade_white),
+    FLASH_RGB    ("Flash RGB", R.string.pattern_flash_rgb),
+    FLASH_ALL    ("Flash All", R.string.pattern_flash_all),
+    STROBE_W     ("Strobe White", R.string.pattern_strobe_white),
 }

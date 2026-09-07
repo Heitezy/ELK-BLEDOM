@@ -73,7 +73,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import com.example.elkbledom.R
 import androidx.compose.ui.unit.dp
 import com.example.elkbledom.ble.ConnectionState
 import com.example.elkbledom.ble.LedPattern
@@ -107,7 +109,7 @@ fun MainScreen(
                             tint = Color.Unspecified
                         )
                         Spacer(Modifier.width(8.dp))
-                        Text("ELK-BLEDOM", fontWeight = FontWeight.Bold)
+                        Text(stringResource(R.string.app_name), fontWeight = FontWeight.Bold)
                     }
                 },
                 actions = {
@@ -116,7 +118,7 @@ fun MainScreen(
                         IconButton(onClick = { vm.togglePower() }) {
                             Icon(
                                 if (ui.isPoweredOn) Icons.Default.Lightbulb else Icons.Default.LightbulbCircle,
-                                contentDescription = "Toggle power",
+                                contentDescription = stringResource(R.string.cd_toggle_power),
                                 tint = if (ui.isPoweredOn) MaterialTheme.colorScheme.primary
                                 else MaterialTheme.colorScheme.onSurfaceVariant,
                             )
@@ -189,7 +191,7 @@ fun MainScreen(
                 verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
                 Text(
-                    "Pick a colour",
+                    stringResource(R.string.msg_pick_colour),
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
                 )
@@ -240,7 +242,7 @@ private fun ConnectionCard(ui: UiState, vm: MainViewModel) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(Icons.Default.Bluetooth, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
             Spacer(Modifier.width(8.dp))
-            Text("Bluetooth", style = MaterialTheme.typography.titleMedium)
+            Text(stringResource(R.string.label_bluetooth), style = MaterialTheme.typography.titleMedium)
         }
         Spacer(Modifier.height(12.dp))
 
@@ -248,7 +250,7 @@ private fun ConnectionCard(ui: UiState, vm: MainViewModel) {
             ConnectionState.DISCONNECTED, ConnectionState.ERROR -> {
                 if (ui.connectionState == ConnectionState.ERROR) {
                     Text(
-                        "Connection failed. Try again.",
+                        stringResource(R.string.msg_connection_failed),
                         color = MaterialTheme.colorScheme.error,
                         style = MaterialTheme.typography.bodySmall,
                     )
@@ -266,7 +268,7 @@ private fun ConnectionCard(ui: UiState, vm: MainViewModel) {
                     )
                     Spacer(Modifier.height(16.dp))
                     Text(
-                        "Ready to illuminate?",
+                        stringResource(R.string.msg_ready_to_illuminate),
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.primary
                     )
@@ -275,7 +277,7 @@ private fun ConnectionCard(ui: UiState, vm: MainViewModel) {
                 Button(onClick = { vm.startScan() }, modifier = Modifier.fillMaxWidth()) {
                     Icon(Icons.Default.BluetoothSearching, contentDescription = null)
                     Spacer(Modifier.width(8.dp))
-                    Text("Scan for devices")
+                    Text(stringResource(R.string.btn_scan))
                 }
             }
 
@@ -283,14 +285,14 @@ private fun ConnectionCard(ui: UiState, vm: MainViewModel) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     CircularProgressIndicator(Modifier.size(20.dp), strokeWidth = 2.dp)
                     Spacer(Modifier.width(8.dp))
-                    Text("Scanning…", style = MaterialTheme.typography.bodyMedium)
+                    Text(stringResource(R.string.status_scanning), style = MaterialTheme.typography.bodyMedium)
                     Spacer(Modifier.weight(1f))
-                    FilledTonalButton(onClick = { vm.stopScan() }) { Text("Stop") }
+                    FilledTonalButton(onClick = { vm.stopScan() }) { Text(stringResource(R.string.btn_stop)) }
                 }
                 Spacer(Modifier.height(8.dp))
                 if (ui.scannedDevices.isEmpty()) {
                     Text(
-                        "Looking for BLE devices…",
+                        stringResource(R.string.status_looking_ble),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
@@ -310,7 +312,7 @@ private fun ConnectionCard(ui: UiState, vm: MainViewModel) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     CircularProgressIndicator(Modifier.size(20.dp), strokeWidth = 2.dp)
                     Spacer(Modifier.width(8.dp))
-                    Text("Connecting…", style = MaterialTheme.typography.bodyMedium)
+                    Text(stringResource(R.string.status_connecting), style = MaterialTheme.typography.bodyMedium)
                 }
             }
 
@@ -324,12 +326,12 @@ private fun ConnectionCard(ui: UiState, vm: MainViewModel) {
                         tint = Color(0xFF4CAF50), modifier = Modifier.size(20.dp),
                     )
                     Spacer(Modifier.width(8.dp))
-                    Text("Connected", color = Color(0xFF4CAF50), fontWeight = FontWeight.Medium)
+                    Text(stringResource(R.string.status_connected), color = Color(0xFF4CAF50), fontWeight = FontWeight.Medium)
                     Spacer(Modifier.weight(1f))
                     FilledTonalButton(onClick = { vm.disconnect() }) {
                         Icon(Icons.Default.BluetoothDisabled, contentDescription = null, modifier = Modifier.size(16.dp))
                         Spacer(Modifier.width(4.dp))
-                        Text("Disconnect")
+                        Text(stringResource(R.string.btn_disconnect))
                     }
                 }
             }
@@ -380,7 +382,7 @@ private fun ColorPreviewCard(
         ) {
             Icon(Icons.Default.Palette, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
             Text(
-                "Colour",
+                stringResource(R.string.label_colour),
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.weight(1f),
             )
@@ -404,7 +406,7 @@ private fun ColorPreviewCard(
             )
             Icon(
                 Icons.Default.ChevronRight,
-                contentDescription = "Open colour picker",
+                contentDescription = stringResource(R.string.cd_open_colour_picker),
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.size(18.dp),
             )
@@ -420,7 +422,7 @@ private fun BrightnessCard(brightness: Int, onChanged: (Int) -> Unit) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(Icons.Default.Power, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
             Spacer(Modifier.width(8.dp))
-            Text("Brightness: $brightness%", style = MaterialTheme.typography.titleMedium)
+            Text(stringResource(R.string.label_brightness, brightness), style = MaterialTheme.typography.titleMedium)
         }
         Spacer(Modifier.height(8.dp))
         Slider(
@@ -440,7 +442,7 @@ private fun MusicSyncCard(ui: UiState, vm: MainViewModel) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(Icons.Default.MusicNote, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
             Spacer(Modifier.width(8.dp))
-            Text("Music Sync", style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
+            Text(stringResource(R.string.label_music_sync), style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
             Switch(checked = ui.isMusicSync, onCheckedChange = { vm.setMusicSync(it) })
         }
 
@@ -453,7 +455,7 @@ private fun MusicSyncCard(ui: UiState, vm: MainViewModel) {
                     FilterChip(
                         selected = ui.audioMode == AudioMode.MIC,
                         onClick = { vm.setAudioMode(AudioMode.MIC) },
-                        label = { Text("Microphone") },
+                        label = { Text(stringResource(R.string.label_microphone)) },
                         leadingIcon = {
                             Icon(Icons.Default.Mic, contentDescription = null, modifier = Modifier.size(16.dp))
                         },
@@ -464,7 +466,7 @@ private fun MusicSyncCard(ui: UiState, vm: MainViewModel) {
                             if (ui.isPlaybackSupported) vm.setAudioMode(AudioMode.PLAYBACK)
                         },
                         enabled = ui.isPlaybackSupported,
-                        label = { Text("Phone Audio") },
+                        label = { Text(stringResource(R.string.label_phone_audio)) },
                         leadingIcon = {
                             Icon(Icons.Default.PhoneAndroid, contentDescription = null, modifier = Modifier.size(16.dp))
                         },
@@ -473,20 +475,19 @@ private fun MusicSyncCard(ui: UiState, vm: MainViewModel) {
 
                 if (!ui.isPlaybackSupported) {
                     Text(
-                        "Phone Audio requires Android 10+",
+                        stringResource(R.string.msg_android_10_required),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 } else if (ui.audioMode == AudioMode.PLAYBACK) {
                     Text(
-                        "Captures what plays through your speakers or headphones.\n" +
-                            "Note: DRM-protected apps (Spotify, Netflix) block capture.",
+                        stringResource(R.string.desc_phone_audio),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 } else {
                     Text(
-                        "Microphone picks up sound from the room — works with any source.",
+                        stringResource(R.string.desc_microphone),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
@@ -496,16 +497,16 @@ private fun MusicSyncCard(ui: UiState, vm: MainViewModel) {
 
                 // ── Per-band colour pickers ───────────────────────────────
                 Text(
-                    "Band Colours  ·  tap a swatch to assign  ·  tap ✕ to mute",
+                    stringResource(R.string.desc_band_colours),
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
                 Spacer(Modifier.height(8.dp))
-                BandColorRow("Bass",  ui.bassColor,  vm::setBassColor)
+                BandColorRow(stringResource(R.string.label_bass),  ui.bassColor,  vm::setBassColor)
                 Spacer(Modifier.height(6.dp))
-                BandColorRow("Mids",  ui.midColor,   vm::setMidColor)
+                BandColorRow(stringResource(R.string.label_mids),  ui.midColor,   vm::setMidColor)
                 Spacer(Modifier.height(6.dp))
-                BandColorRow("Highs", ui.highColor,  vm::setHighColor)
+                BandColorRow(stringResource(R.string.label_highs), ui.highColor,  vm::setHighColor)
 
                 Spacer(Modifier.height(16.dp))
 
@@ -535,7 +536,7 @@ private fun ScreenSyncCard(ui: UiState, vm: MainViewModel) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(Icons.Default.ScreenShare, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
             Spacer(Modifier.width(8.dp))
-            Text("Screen Sync", style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
+            Text(stringResource(R.string.label_screen_sync), style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
             Switch(
                 checked = ui.isScreenSync,
                 onCheckedChange = { vm.setScreenSync(it) },
@@ -546,7 +547,7 @@ private fun ScreenSyncCard(ui: UiState, vm: MainViewModel) {
         if (!ui.isPlaybackSupported) {
             Spacer(Modifier.height(4.dp))
             Text(
-                "Screen Sync requires Android 10+",
+                stringResource(R.string.msg_android_10_required),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
@@ -576,7 +577,7 @@ private fun ScreenSyncCard(ui: UiState, vm: MainViewModel) {
                     Spacer(Modifier.width(12.dp))
                     Column {
                         Text(
-                            "Dominant colour",
+                            stringResource(R.string.label_dominant_colour),
                             style = MaterialTheme.typography.labelMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
@@ -590,8 +591,7 @@ private fun ScreenSyncCard(ui: UiState, vm: MainViewModel) {
 
                 Spacer(Modifier.height(8.dp))
                 Text(
-                    "Mirrors the dominant colour on your screen to the LEDs in real time — " +
-                        "saturation-weighted at 20 fps. Bright, colourful content works best.",
+                    stringResource(R.string.desc_screen_sync),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -615,9 +615,9 @@ internal fun FreqBars(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalAlignment = Alignment.Bottom,
     ) {
-        FreqBar("Bass",  animBass, bassColor, bassActive, Modifier.weight(1f))
-        FreqBar("Mids",  animMid,  midColor,  midActive,  Modifier.weight(1f))
-        FreqBar("Highs", animHigh, highColor, highActive, Modifier.weight(1f))
+        FreqBar(stringResource(R.string.label_bass),  animBass, bassColor, bassActive, Modifier.weight(1f))
+        FreqBar(stringResource(R.string.label_mids),  animMid,  midColor,  midActive,  Modifier.weight(1f))
+        FreqBar(stringResource(R.string.label_highs), animHigh, highColor, highActive, Modifier.weight(1f))
     }
 
     if (isBeat) {
@@ -625,7 +625,7 @@ internal fun FreqBars(
         Row(verticalAlignment = Alignment.CenterVertically) {
             Box(modifier = Modifier.size(8.dp).background(Color(0xFFFFBB33), CircleShape))
             Spacer(Modifier.width(6.dp))
-            Text("Beat", style = MaterialTheme.typography.bodySmall, color = Color(0xFFFFBB33))
+            Text(stringResource(R.string.label_beat), style = MaterialTheme.typography.bodySmall, color = Color(0xFFFFBB33))
         }
     }
 }
@@ -679,7 +679,7 @@ internal fun BandColorRow(
             modifier = Modifier.weight(1f)
         ) {
             OutlinedTextField(
-                value = selected.name,
+                value = stringResource(selected.labelRes),
                 onValueChange = {},
                 readOnly = true,
                 leadingIcon = {
@@ -705,7 +705,7 @@ internal fun BandColorRow(
             ) {
                 SyncColor.entries.forEach { color ->
                     DropdownMenuItem(
-                        text = { Text(color.name) },
+                        text = { Text(stringResource(color.labelRes)) },
                         onClick = {
                             onSelect(color)
                             expanded = false
@@ -777,12 +777,12 @@ private fun AmbilightCard(isEnabled: Boolean, onToggle: (Boolean) -> Unit) {
             Spacer(Modifier.width(4.dp))
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    "Ambilight smooth",
+                    stringResource(R.string.label_ambilight_smooth),
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.Medium,
                 )
                 Text(
-                    "Blends colour changes gradually — easier on the eyes during sync modes.",
+                    stringResource(R.string.desc_ambilight_smooth),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )

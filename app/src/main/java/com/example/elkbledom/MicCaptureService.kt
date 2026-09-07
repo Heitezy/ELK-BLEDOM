@@ -35,8 +35,8 @@ class MicCaptureService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         ensureChannel()
         val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("ELK-BLEDOM")
-            .setContentText("Music Sync listening to the microphone")
+            .setContentTitle(getString(R.string.app_name))
+            .setContentText(getString(R.string.notif_mic_listening))
             .setSmallIcon(android.R.drawable.ic_btn_speak_now)
             .setSilent(true)
             .setOngoing(true)
@@ -59,8 +59,13 @@ class MicCaptureService : Service() {
         val mgr = getSystemService(NotificationManager::class.java)
         if (mgr.getNotificationChannel(CHANNEL_ID) != null) return
         mgr.createNotificationChannel(
-            NotificationChannel(CHANNEL_ID, "Music Sync (Microphone)", NotificationManager.IMPORTANCE_LOW)
-                .apply { description = "Active while Music Sync is listening to the microphone" }
+            NotificationChannel(
+                CHANNEL_ID,
+                getString(R.string.channel_music_sync_mic_name),
+                NotificationManager.IMPORTANCE_LOW
+            ).apply {
+                description = getString(R.string.channel_music_sync_mic_desc)
+            }
         )
     }
 

@@ -1,0 +1,103 @@
+<resources>
+    <string name="app_name">ELK-BLEDOM</string>
+
+    <!-- Permissions -->
+    <string name="perm_rationale">ELK-BLEDOM needs Bluetooth and Microphone permissions to scan for your LED strip and enable music sync.</string>
+    <string name="btn_grant_permissions">Grant Permissions</string>
+    <string name="bt_disabled_msg">Bluetooth is disabled. Please enable it to connect to your LED strip.</string>
+    <string name="btn_enable_bluetooth">Enable Bluetooth</string>
+
+    <!-- Notifications & Services -->
+    <string name="channel_media_capture_name">Media Capture</string>
+    <string name="channel_media_capture_desc">Active while capturing phone audio or screen content for LED sync</string>
+    <string name="notif_screen_capture">Capturing screen content for Screen Sync</string>
+    <string name="notif_phone_audio_capture">Capturing phone audio for Music Sync</string>
+    <string name="channel_music_sync_mic_name">Music Sync (Microphone)</string>
+    <string name="channel_music_sync_mic_desc">Active while Music Sync is listening to the microphone</string>
+    <string name="notif_mic_listening">Music Sync listening to the microphone</string>
+
+    <!-- General UI -->
+    <string name="btn_scan">Scan for devices</string>
+    <string name="btn_stop">Stop</string>
+    <string name="status_scanning">Scanning…</string>
+    <string name="status_looking_ble">Looking for BLE devices…</string>
+    <string name="status_connecting">Connecting…</string>
+    <string name="status_connected">Connected</string>
+    <string name="status_disconnected">Disconnected</string>
+    <string name="btn_disconnect">Disconnect</string>
+    <string name="msg_connection_failed">Connection failed. Try again.</string>
+    <string name="msg_ready_to_illuminate">Ready to illuminate?</string>
+    <string name="label_colour">Colour</string>
+    <string name="label_brightness_tv">Brightness</string>
+    <string name="label_brightness">Brightness: %1$d%%</string>
+    <string name="label_music_sync">Music Sync</string>
+    <string name="label_microphone">Microphone</string>
+    <string name="label_phone_audio">Phone Audio</string>
+    <string name="label_tv_audio">TV Audio</string>
+    <string name="msg_android_10_required">Requires Android 10+</string>
+    <string name="desc_phone_audio">Captures what plays through your speakers or headphones.\nNote: DRM-protected apps (Spotify, Netflix) block capture.</string>
+    <string name="desc_microphone">Microphone picks up sound from the room — works with any source.</string>
+    <string name="desc_band_colours">Band Colours  ·  tap a swatch to assign  ·  tap ✕ to mute</string>
+    <string name="label_bass">Bass</string>
+    <string name="label_mids">Mids</string>
+    <string name="label_highs">Highs</string>
+    <string name="label_screen_sync">Screen Sync</string>
+    <string name="label_screen_tv">Screen</string>
+    <string name="desc_screen_sync">Mirrors the dominant colour on your screen to the LEDs in real time — saturation-weighted at 20 fps. Bright, colourful content works best.</string>
+    <string name="label_dominant_colour">Dominant colour</string>
+    <string name="label_beat">Beat</string>
+    <string name="label_ambilight_smooth">Ambilight smooth</string>
+    <string name="desc_ambilight_smooth">Blends colour changes gradually — easier on the eyes during sync modes.</string>
+
+    <!-- TV Specific UI -->
+    <string name="label_bluetooth">Bluetooth</string>
+    <string name="label_patterns">Patterns</string>
+    <string name="label_settings">Settings</string>
+    <string name="msg_connect_first">Connect to a device first</string>
+    <string name="msg_go_to_bt_section">Go to the Bluetooth section to scan and pair.</string>
+    <string name="btn_turn_on">Turn On</string>
+    <string name="btn_turn_off">Turn Off</string>
+    <string name="desc_nav_buttons">Navigate between buttons with D-pad Left / Right, press OK to apply</string>
+    <string name="label_hue">Hue</string>
+    <string name="label_saturation">Saturation</string>
+    <string name="desc_nav_rows">Navigate rows with D-pad Up / Down, buttons with Left / Right, press OK to apply</string>
+    <string name="label_animation_speed">Animation Speed</string>
+    <string name="label_delay_ms">Delay (ms)</string>
+    <string name="label_delay_range">10 – 5000</string>
+    <string name="label_delay_range_ms">10 – 5000 ms</string>
+    <string name="label_pattern">Pattern</string>
+    <string name="label_enabled">Enabled</string>
+    <string name="label_band_colours">Band Colours</string>
+
+    <!-- Patterns -->
+    <string name="pattern_solid">Solid</string>
+    <string name="pattern_jump_rgb">Jump RGB</string>
+    <string name="pattern_jump_all">Jump All</string>
+    <string name="pattern_fade_rgb">Fade RGB</string>
+    <string name="pattern_fade_all">Fade All</string>
+    <string name="pattern_crossfade_red">Crossfade Red</string>
+    <string name="pattern_crossfade_green_blue">Crossfade Green Blue</string>
+    <string name="pattern_crossfade_blue_orange">Crossfade Blue Orange</string>
+    <string name="pattern_crossfade_blue">Crossfade Blue</string>
+    <string name="pattern_crossfade_white">Crossfade White</string>
+    <string name="pattern_flash_rgb">Flash RGB</string>
+    <string name="pattern_flash_all">Flash All</string>
+    <string name="pattern_strobe_white">Strobe White</string>
+
+    <!-- Accessibility & Misc -->
+    <string name="cd_toggle_power">Toggle power</string>
+    <string name="cd_open_colour_picker">Open colour picker</string>
+    <string name="msg_pick_colour">Pick a colour</string>
+    <!-- Sync Colours -->
+    <string name="color_off">Off</string>
+    <string name="color_red">Red</string>
+    <string name="color_orange">Orange</string>
+    <string name="color_yellow">Yellow</string>
+    <string name="color_green">Green</string>
+    <string name="color_cyan">Cyan</string>
+    <string name="color_blue">Blue</string>
+    <string name="color_violet">Violet</string>
+    <string name="color_magenta">Magenta</string>
+    <string name="color_pink">Pink</string>
+    <string name="color_white">White</string>
+</resources>

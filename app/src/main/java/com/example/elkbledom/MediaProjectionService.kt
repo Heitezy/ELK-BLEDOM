@@ -31,11 +31,11 @@ class MediaProjectionService : Service() {
             runCatching { Reason.valueOf(it) }.getOrNull()
         }
         val text = when (reason) {
-            Reason.SCREEN -> "Capturing screen content for Screen Sync"
-            Reason.PHONE_AUDIO, null -> "Capturing phone audio for Music Sync"
+            Reason.SCREEN -> getString(R.string.notif_screen_capture)
+            Reason.PHONE_AUDIO, null -> getString(R.string.notif_phone_audio_capture)
         }
         val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("ELK-BLEDOM")
+            .setContentTitle(getString(R.string.app_name))
             .setContentText(text)
             .setSmallIcon(android.R.drawable.ic_media_play)
             .setSilent(true)
@@ -57,8 +57,13 @@ class MediaProjectionService : Service() {
         val mgr = getSystemService(NotificationManager::class.java)
         if (mgr.getNotificationChannel(CHANNEL_ID) != null) return
         mgr.createNotificationChannel(
-            NotificationChannel(CHANNEL_ID, "Media Capture", NotificationManager.IMPORTANCE_LOW)
-                .apply { description = "Active while capturing phone audio or screen content for LED sync" }
+            NotificationChannel(
+                CHANNEL_ID,
+                getString(R.string.channel_media_capture_name),
+                NotificationManager.IMPORTANCE_LOW
+            ).apply {
+                description = getString(R.string.channel_media_capture_desc)
+            }
         )
     }
 

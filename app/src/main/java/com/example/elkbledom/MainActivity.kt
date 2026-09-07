@@ -33,6 +33,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
@@ -239,13 +240,12 @@ private fun PermissionGate(onRequest: () -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
-            "ELK-BLEDOM needs Bluetooth and Microphone permissions to scan for " +
-                "your LED strip and enable music sync.",
+            stringResource(R.string.perm_rationale),
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.bodyLarge,
         )
         Spacer(Modifier.height(24.dp))
-        Button(onClick = onRequest) { Text("Grant Permissions") }
+        Button(onClick = onRequest) { Text(stringResource(R.string.btn_grant_permissions)) }
     }
 }
 
@@ -257,11 +257,11 @@ private fun BluetoothGate(onEnable: () -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
-            "Bluetooth is disabled. Please enable it to connect to your LED strip.",
+            stringResource(R.string.bt_disabled_msg),
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.bodyLarge,
         )
         Spacer(Modifier.height(24.dp))
-        Button(onClick = onEnable) { Text("Enable Bluetooth") }
+        Button(onClick = onEnable) { Text(stringResource(R.string.btn_enable_bluetooth)) }
     }
 }

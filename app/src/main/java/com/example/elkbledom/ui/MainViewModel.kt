@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.elkbledom.MicCaptureService
+import com.example.elkbledom.R
 import com.example.elkbledom.audio.AudioAnalyzer
 import com.example.elkbledom.audio.FrequencyData
 import com.example.elkbledom.ble.BleManager
@@ -32,23 +33,18 @@ import kotlinx.coroutines.launch
 
 enum class AudioMode { MIC, PLAYBACK }
 
-/**
- * Selectable colour for each frequency band.
- * OFF means that band produces no output.
- * RGB values are 0–255 and mixed additively across bands.
- */
-enum class SyncColor(val r: Int, val g: Int, val b: Int) {
-    OFF     (0,   0,   0  ),
-    RED     (255, 0,   0  ),
-    ORANGE  (255, 90,  0  ),
-    YELLOW  (255, 210, 0  ),
-    GREEN   (0,   255, 0  ),
-    CYAN    (0,   255, 220),
-    BLUE    (0,   0,   255),
-    VIOLET  (120, 0,   255),
-    MAGENTA (255, 0,   180),
-    PINK    (255, 60,  120),
-    WHITE   (255, 255, 255),
+enum class SyncColor(val r: Int, val g: Int, val b: Int, val labelRes: Int) {
+    OFF     (0,   0,   0,   R.string.color_off),
+    RED     (255, 0,   0,   R.string.color_red),
+    ORANGE  (255, 90,  0,   R.string.color_orange),
+    YELLOW  (255, 210, 0,   R.string.color_yellow),
+    GREEN   (0,   255, 0,   R.string.color_green),
+    CYAN    (0,   255, 220, R.string.color_cyan),
+    BLUE    (0,   0,   255, R.string.color_blue),
+    VIOLET  (120, 0,   255, R.string.color_violet),
+    MAGENTA (255, 0,   180, R.string.color_magenta),
+    PINK    (255, 60,  120, R.string.color_pink),
+    WHITE   (255, 255, 255, R.string.color_white),
 }
 
 data class UiState(

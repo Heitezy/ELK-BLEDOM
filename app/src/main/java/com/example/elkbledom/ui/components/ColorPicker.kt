@@ -41,6 +41,8 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
+import com.example.elkbledom.R
 import com.example.elkbledom.ui.hsvToRgb
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -62,7 +64,7 @@ fun ColorPicker(
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
-        Text("Color", style = MaterialTheme.typography.titleMedium)
+        Text(stringResource(R.string.label_colour), style = MaterialTheme.typography.titleMedium)
         Spacer(Modifier.height(12.dp))
 
         ColorWheel(
@@ -83,7 +85,7 @@ fun ColorPicker(
             }
         )
         Text(
-            "Brightness: ${(colorValue * 100).toInt()}%",
+            stringResource(R.string.label_brightness, (colorValue * 100).toInt()),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )

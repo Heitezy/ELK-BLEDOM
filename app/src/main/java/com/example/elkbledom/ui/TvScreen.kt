@@ -71,6 +71,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -85,15 +86,19 @@ import kotlinx.coroutines.delay
 
 // ── Section enum ──────────────────────────────────────────────────────────────
 
-private enum class TvSection(val label: String, val icon: ImageVector) {
-    BLUETOOTH("Bluetooth",   Icons.Default.Bluetooth),
-    BRIGHTNESS("Brightness", Icons.Default.BrightnessHigh),
-    COLOR("Colour",          Icons.Default.Palette),
-    PATTERNS("Patterns",     Icons.Default.AutoAwesome),
-    MUSIC_SYNC("Music Sync", Icons.Default.MusicNote),
-    SCREEN_SYNC("Screen",    Icons.Default.ScreenShare),
-    SETTINGS("Settings",     Icons.Default.Settings),
+private enum class TvSection(val labelRes: Int, val icon: ImageVector) {
+    BLUETOOTH(R.string.label_bluetooth,   Icons.Default.Bluetooth),
+    BRIGHTNESS(R.string.label_brightness_tv, Icons.Default.BrightnessHigh),
+    COLOR(R.string.label_colour,          Icons.Default.Palette),
+    PATTERNS(R.string.label_patterns,     Icons.Default.AutoAwesome),
+    MUSIC_SYNC(R.string.label_music_sync, Icons.Default.MusicNote),
+    SCREEN_SYNC(R.string.label_screen_tv, Icons.Default.ScreenShare),
+    SETTINGS(R.string.label_settings,     Icons.Default.Settings),
 }
+
+// Helper to get string from labelRes
+@Composable
+private fun TvSection.label() = stringResource(labelRes)
 
 // ── Entry point ───────────────────────────────────────────────────────────────
 
@@ -141,7 +146,7 @@ fun TvScreen(vm: MainViewModel, onRequestMediaProjection: () -> Unit = {}) {
                 )
                 Spacer(Modifier.width(8.dp))
                 Text(
-                    "ELK-BLEDOM",
+                    stringResource(R.string.app_name),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary,
@@ -172,7 +177,7 @@ fun TvScreen(vm: MainViewModel, onRequestMediaProjection: () -> Unit = {}) {
                 )
                 Spacer(Modifier.width(6.dp))
                 Text(
-                    if (connected) "Connected" else "Disconnected",
+                    if (connected) stringResource(R.string.status_connected) else stringResource(R.string.status_disconnected),
                     style = MaterialTheme.typography.bodySmall,
                     color = if (connected) Color(0xFF4CAF50) else MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -242,7 +247,7 @@ private fun TvNavItem(section: TvSection, selected: Boolean, onClick: () -> Unit
         )
         Spacer(Modifier.width(10.dp))
         Text(
-            section.label,
+            section.label(),
             style = MaterialTheme.typography.bodyLarge,
             fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Normal,
             color = if (selected || focused) MaterialTheme.colorScheme.primary
@@ -264,13 +269,13 @@ private fun NotConnectedHint() {
             )
             Spacer(Modifier.height(16.dp))
             Text(
-                "Connect to a device first",
+                stringResource(R.string.msg_connect_first),
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
             Spacer(Modifier.height(8.dp))
             Text(
-                "Go to the Bluetooth section to scan and pair.",
+                stringResource(R.string.msg_go_to_bt_section),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
@@ -338,12 +343,12 @@ private fun TvBluetoothSection(ui: UiState, vm: MainViewModel, firstFocus: Focus
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(20.dp),
     ) {
-        TvSectionTitle("Bluetooth", Icons.Default.Bluetooth)
+        TvSectionTitle(stringResource(R.string.label_bluetooth), Icons.Default.Bluetooth)
 
         when (ui.connectionState) {
             ConnectionState.DISCONNECTED, ConnectionState.ERROR -> {
                 if (ui.connectionState == ConnectionState.ERROR) {
-                    Text("Connection failed. Try again.", color = MaterialTheme.colorScheme.error)
+                    Text(stringResource(R.string.msg_connection_failed), color = MaterialTheme.colorScheme.error)
                     Spacer(Modifier.height(4.dp))
                 }
                 Button(
@@ -354,7 +359,7 @@ private fun TvBluetoothSection(ui: UiState, vm: MainViewModel, firstFocus: Focus
                 ) {
                     Icon(Icons.Default.BluetoothSearching, null)
                     Spacer(Modifier.width(8.dp))
-                    Text("Scan for Devices", fontSize = 17.sp)
+                    Text(stringResource(R.string.btn_scan), fontSize = 17.sp)
                 }
             }
 
@@ -364,16 +369,16 @@ private fun TvBluetoothSection(ui: UiState, vm: MainViewModel, firstFocus: Focus
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
                     CircularProgressIndicator(Modifier.size(24.dp), strokeWidth = 3.dp)
-                    Text("Scanning…", style = MaterialTheme.typography.bodyLarge)
+                    Text(stringResource(R.string.status_scanning), style = MaterialTheme.typography.bodyLarge)
                     Spacer(Modifier.width(4.dp))
                     FilledTonalButton(
                         onClick = { vm.stopScan() },
                         modifier = Modifier.focusRequester(firstFocus),
-                    ) { Text("Stop") }
+                    ) { Text(stringResource(R.string.btn_stop)) }
                 }
                 if (ui.scannedDevices.isEmpty()) {
                     Text(
-                        "Looking for BLE devices…",
+                        stringResource(R.string.status_looking_ble),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
@@ -396,7 +401,7 @@ private fun TvBluetoothSection(ui: UiState, vm: MainViewModel, firstFocus: Focus
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
                     CircularProgressIndicator(Modifier.size(24.dp), strokeWidth = 3.dp)
-                    Text("Connecting…", style = MaterialTheme.typography.bodyLarge)
+                    Text(stringResource(R.string.status_connecting), style = MaterialTheme.typography.bodyLarge)
                 }
             }
 
@@ -411,7 +416,7 @@ private fun TvBluetoothSection(ui: UiState, vm: MainViewModel, firstFocus: Focus
                         modifier = Modifier.size(32.dp),
                     )
                     Text(
-                        "Connected",
+                        stringResource(R.string.status_connected),
                         style = MaterialTheme.typography.headlineSmall,
                         color = Color(0xFF4CAF50),
                         fontWeight = FontWeight.Medium,
@@ -428,12 +433,12 @@ private fun TvBluetoothSection(ui: UiState, vm: MainViewModel, firstFocus: Focus
                             null,
                         )
                         Spacer(Modifier.width(8.dp))
-                        Text(if (ui.isPoweredOn) "Turn Off" else "Turn On")
+                        Text(if (ui.isPoweredOn) stringResource(R.string.btn_turn_off) else stringResource(R.string.btn_turn_on))
                     }
                     FilledTonalButton(onClick = { vm.disconnect() }, modifier = Modifier.height(48.dp)) {
                         Icon(Icons.Default.BluetoothDisabled, null)
                         Spacer(Modifier.width(8.dp))
-                        Text("Disconnect")
+                        Text(stringResource(R.string.btn_disconnect))
                     }
                 }
             }
@@ -488,7 +493,7 @@ private fun TvBrightnessSection(ui: UiState, vm: MainViewModel, firstFocus: Focu
     if (ui.connectionState != ConnectionState.CONNECTED) { NotConnectedHint(); return }
 
     Column(verticalArrangement = Arrangement.spacedBy(24.dp)) {
-        TvSectionTitle("Brightness", Icons.Default.BrightnessHigh)
+        TvSectionTitle(stringResource(R.string.label_brightness_tv), Icons.Default.BrightnessHigh)
 
         Text(
             "${ui.brightness}%",
@@ -510,7 +515,7 @@ private fun TvBrightnessSection(ui: UiState, vm: MainViewModel, firstFocus: Focu
         }
 
         Text(
-            "Navigate between buttons with D-pad Left / Right, press OK to apply",
+            stringResource(R.string.desc_nav_buttons),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
@@ -526,7 +531,7 @@ private fun TvColorSection(ui: UiState, vm: MainViewModel, firstFocus: FocusRequ
     val (r, g, b) = hsvToRgb(ui.hue, ui.saturation, ui.colorValue)
 
     Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
-        TvSectionTitle("Colour", Icons.Default.Palette)
+        TvSectionTitle(stringResource(R.string.label_colour), Icons.Default.Palette)
 
         Row(horizontalArrangement = Arrangement.spacedBy(40.dp), verticalAlignment = Alignment.Top) {
             Box(
@@ -542,7 +547,7 @@ private fun TvColorSection(ui: UiState, vm: MainViewModel, firstFocus: FocusRequ
                 verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
                 TvColorStepRow(
-                    label = "Hue",
+                    label = stringResource(R.string.label_hue),
                     valueText = "${ui.hue.toInt()}°",
                     firstFocus = firstFocus,
                     onStep = { big ->
@@ -555,7 +560,7 @@ private fun TvColorSection(ui: UiState, vm: MainViewModel, firstFocus: FocusRequ
                     },
                 )
                 TvColorStepRow(
-                    label = "Saturation",
+                    label = stringResource(R.string.label_saturation),
                     valueText = "${(ui.saturation * 100).toInt()}%",
                     onStep = { big ->
                         vm.setHueSaturation(ui.hue, (ui.saturation + if (big) 0.1f else 0.01f).coerceAtMost(1f))
@@ -565,7 +570,7 @@ private fun TvColorSection(ui: UiState, vm: MainViewModel, firstFocus: FocusRequ
                     },
                 )
                 TvColorStepRow(
-                    label = "Brightness",
+                    label = stringResource(R.string.label_brightness_tv),
                     valueText = "${(ui.colorValue * 100).toInt()}%",
                     onStep = { big ->
                         vm.setColorValue((ui.colorValue + if (big) 0.1f else 0.01f).coerceAtMost(1f))
@@ -578,7 +583,7 @@ private fun TvColorSection(ui: UiState, vm: MainViewModel, firstFocus: FocusRequ
         }
 
         Text(
-            "Navigate rows with D-pad Up / Down, buttons with Left / Right, press OK to apply",
+            stringResource(R.string.desc_nav_rows),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
@@ -635,7 +640,7 @@ private fun TvPatternsSection(ui: UiState, vm: MainViewModel, firstFocus: FocusR
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            TvSectionTitle("Patterns", Icons.Default.AutoAwesome)
+            TvSectionTitle(stringResource(R.string.label_patterns), Icons.Default.AutoAwesome)
             LedPattern.entries.forEachIndexed { idx, pattern ->
                 TvPatternItem(
                     pattern = pattern,
@@ -719,12 +724,12 @@ private fun TvDelayInput(patternSpeedMs: Long, onSpeedChanged: (Long) -> Unit) {
     }
 
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Text("Animation Speed", style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text(stringResource(R.string.label_animation_speed), style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         OutlinedTextField(
             value = text,
             onValueChange = { text = it.filter { c -> c.isDigit() } },
-            label = { Text("Delay (ms)") },
-            supportingText = { Text("10 – 5000") },
+            label = { Text(stringResource(R.string.label_delay_ms)) },
+            supportingText = { Text(stringResource(R.string.label_delay_range)) },
             singleLine = true,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Number,
@@ -747,9 +752,9 @@ private fun TvMusicSyncSection(ui: UiState, vm: MainViewModel, firstFocus: Focus
         modifier = Modifier.verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-        TvSectionTitle("Music Sync", Icons.Default.MusicNote)
+        TvSectionTitle(stringResource(R.string.label_music_sync), Icons.Default.MusicNote)
 
-        TvToggleRow("Enabled", ui.isMusicSync, focusRequester = firstFocus) { vm.setMusicSync(it) }
+        TvToggleRow(stringResource(R.string.label_enabled), ui.isMusicSync, focusRequester = firstFocus) { vm.setMusicSync(it) }
 
         AnimatedVisibility(visible = ui.isMusicSync) {
             Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
@@ -757,7 +762,7 @@ private fun TvMusicSyncSection(ui: UiState, vm: MainViewModel, firstFocus: Focus
                     FilterChip(
                         selected = ui.audioMode == AudioMode.MIC,
                         onClick = { vm.setAudioMode(AudioMode.MIC) },
-                        label = { Text("Microphone", fontSize = 15.sp) },
+                        label = { Text(stringResource(R.string.label_microphone), fontSize = 15.sp) },
                         leadingIcon = { Icon(Icons.Default.Mic, null, Modifier.size(18.dp)) },
                         modifier = Modifier.height(44.dp),
                     )
@@ -765,20 +770,20 @@ private fun TvMusicSyncSection(ui: UiState, vm: MainViewModel, firstFocus: Focus
                         selected = ui.audioMode == AudioMode.PLAYBACK,
                         onClick = { if (ui.isPlaybackSupported) vm.setAudioMode(AudioMode.PLAYBACK) },
                         enabled = ui.isPlaybackSupported,
-                        label = { Text("TV Audio", fontSize = 15.sp) },
+                        label = { Text(stringResource(R.string.label_tv_audio), fontSize = 15.sp) },
                         leadingIcon = { Icon(Icons.Default.PhoneAndroid, null, Modifier.size(18.dp)) },
                         modifier = Modifier.height(44.dp),
                     )
                 }
 
                 Text(
-                    "Band Colours",
+                    stringResource(R.string.label_band_colours),
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
-                TvBandColorRow("Bass",  ui.bassColor,  vm::setBassColor)
-                TvBandColorRow("Mids",  ui.midColor,   vm::setMidColor)
-                TvBandColorRow("Highs", ui.highColor,  vm::setHighColor)
+                TvBandColorRow(stringResource(R.string.label_bass),  ui.bassColor,  vm::setBassColor)
+                TvBandColorRow(stringResource(R.string.label_mids),  ui.midColor,   vm::setMidColor)
+                TvBandColorRow(stringResource(R.string.label_highs), ui.highColor,  vm::setHighColor)
 
                 FreqBars(
                     bass = ui.freqData.bass, mid = ui.freqData.mid, high = ui.freqData.high,
@@ -849,7 +854,7 @@ private fun TvColorChip(color: SyncColor, selected: Boolean, onClick: () -> Unit
                 .border(0.5.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.4f), CircleShape),
         )
         Text(
-            color.name,
+            stringResource(color.labelRes),
             style = MaterialTheme.typography.labelMedium,
             color = if (selected) MaterialTheme.colorScheme.onPrimary
                     else MaterialTheme.colorScheme.onSurface,
@@ -864,13 +869,13 @@ private fun TvScreenSyncSection(ui: UiState, vm: MainViewModel, firstFocus: Focu
     if (ui.connectionState != ConnectionState.CONNECTED) { NotConnectedHint(); return }
 
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        TvSectionTitle("Screen Sync", Icons.Default.ScreenShare)
+        TvSectionTitle(stringResource(R.string.label_screen_sync), Icons.Default.ScreenShare)
 
         if (!ui.isPlaybackSupported) {
-            Text("Screen Sync requires Android 10+", color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(stringResource(R.string.msg_android_10_required), color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
 
-        TvToggleRow("Enabled", ui.isScreenSync, enabled = ui.isPlaybackSupported, focusRequester = firstFocus) {
+        TvToggleRow(stringResource(R.string.label_enabled), ui.isScreenSync, enabled = ui.isPlaybackSupported, focusRequester = firstFocus) {
             vm.setScreenSync(it)
         }
 
@@ -888,7 +893,7 @@ private fun TvScreenSyncSection(ui: UiState, vm: MainViewModel, firstFocus: Focu
                         .border(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f), RoundedCornerShape(12.dp)),
                 )
                 Column {
-                    Text("Dominant colour", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(stringResource(R.string.label_dominant_colour), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     Spacer(Modifier.height(4.dp))
                     Text(
                         "#%02X%02X%02X".format(ui.screenR, ui.screenG, ui.screenB),
@@ -906,10 +911,10 @@ private fun TvScreenSyncSection(ui: UiState, vm: MainViewModel, firstFocus: Focu
 @Composable
 private fun TvSettingsSection(ui: UiState, vm: MainViewModel) {
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        TvSectionTitle("Settings", Icons.Default.Settings)
+        TvSectionTitle(stringResource(R.string.label_settings), Icons.Default.Settings)
         TvCheckboxRow(
-            label = "Ambilight smooth",
-            description = "Blends colour changes gradually — easier on the eyes during sync modes.",
+            label = stringResource(R.string.label_ambilight_smooth),
+            description = stringResource(R.string.desc_ambilight_smooth),
             checked = ui.isAmbilightSmooth,
             onCheckedChange = { vm.setAmbilightSmooth(it) },
         )
