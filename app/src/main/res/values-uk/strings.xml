@@ -1,0 +1,103 @@
+<resources>
+    <string name="app_name">ELK-BLEDOM</string>
+
+    <!-- Permissions -->
+    <string name="perm_rationale">ELK-BLEDOM потребує дозволів на Bluetooth та Мікрофон для пошуку вашої LED-стрічки та увімкнення синхронізації з музикою.</string>
+    <string name="btn_grant_permissions">Надати дозволи</string>
+    <string name="bt_disabled_msg">Bluetooth вимкнено. Будь ласка, увімкніть його, щоб підключитися до вашої LED-стрічки.</string>
+    <string name="btn_enable_bluetooth">Увімкнути Bluetooth</string>
+
+    <!-- Notifications & Services -->
+    <string name="channel_media_capture_name">Захоплення медіа</string>
+    <string name="channel_media_capture_desc">Активно під час захоплення аудіо телефону або вмісту екрана для синхронізації з LED</string>
+    <string name="notif_screen_capture">Захоплення вмісту екрана для синхронізації екрана</string>
+    <string name="notif_phone_audio_capture">Захоплення аудіо телефону для синхронізації з музикою</string>
+    <string name="channel_music_sync_mic_name">Синхронізація з музикою (Мікрофон)</string>
+    <string name="channel_music_sync_mic_desc">Активно, поки Синхронізація з музикою слухає мікрофон</string>
+    <string name="notif_mic_listening">Синхронізація з музикою слухає мікрофон</string>
+
+    <!-- General UI -->
+    <string name="btn_scan">Сканувати пристрої</string>
+    <string name="btn_stop">Зупинити</string>
+    <string name="status_scanning">Сканування…</string>
+    <string name="status_looking_ble">Пошук BLE-пристроїв…</string>
+    <string name="status_connecting">Підключення…</string>
+    <string name="status_connected">Підключено</string>
+    <string name="status_disconnected">Відключено</string>
+    <string name="btn_disconnect">Відключити</string>
+    <string name="msg_connection_failed">Помилка підключення. Спробуйте ще раз.</string>
+    <string name="msg_ready_to_illuminate">Готові до освітлення?</string>
+    <string name="label_colour">Колір</string>
+    <string name="label_brightness_tv">Яскравість</string>
+    <string name="label_brightness">Яскравість: %1$d%%</string>
+    <string name="label_music_sync">Синхронізація з музикою</string>
+    <string name="label_microphone">Мікрофон</string>
+    <string name="label_phone_audio">Аудіо телефону</string>
+    <string name="label_tv_audio">Аудіо ТБ</string>
+    <string name="msg_android_10_required">Потрібен Android 10+</string>
+    <string name="desc_phone_audio">Захоплює те, що відтворюється через ваші динаміки або навушники.\nПримітка: додатки з захистом DRM (Spotify, Netflix) блокують захоплення.</string>
+    <string name="desc_microphone">Мікрофон уловлює звук у кімнаті — працює з будь-яким джерелом.</string>
+    <string name="desc_band_colours">Кольори смуг  ·  торкніться зразка, щоб призначити  ·  торкніться ✕, щоб вимкнути</string>
+    <string name="label_bass">Бас</string>
+    <string name="label_mids">Середні</string>
+    <string name="label_highs">Високі</string>
+    <string name="label_screen_sync">Синхронізація екрана</string>
+    <string name="label_screen_tv">Екран</string>
+    <string name="desc_screen_sync">Відображає домінуючий колір на вашому екрані на світлодіодах у реальному часі — з вагою насиченості при 20 кадр/с. Яскравий, кольоровий контент працює найкраще.</string>
+    <string name="label_dominant_colour">Домінуючий колір</string>
+    <string name="label_beat">Ритм</string>
+    <string name="label_ambilight_smooth">Плавний Ambilight</string>
+    <string name="desc_ambilight_smooth">Поступово змішує зміни кольору — легше для очей під час режимів синхронізації.</string>
+
+    <!-- TV Specific UI -->
+    <string name="label_bluetooth">Bluetooth</string>
+    <string name="label_patterns">Патерни</string>
+    <string name="label_settings">Налаштування</string>
+    <string name="msg_connect_first">Спочатку підключіться до пристрою</string>
+    <string name="msg_go_to_bt_section">Перейдіть до розділу Bluetooth для сканування та з\'єднання.</string>
+    <string name="btn_turn_on">Увімкнути</string>
+    <string name="btn_turn_off">Вимкнути</string>
+    <string name="desc_nav_buttons">Переміщайтеся між кнопками за допомогою D-pad Вліво / Вправо, натисніть OK для застосування</string>
+    <string name="label_hue">Відтінок</string>
+    <string name="label_saturation">Насиченість</string>
+    <string name="desc_nav_rows">Переміщайтеся між рядками за допомогою D-pad Вгору / Вниз, кнопками — Вліво / Вправо, натисніть OK для застосування</string>
+    <string name="label_animation_speed">Швидкість анімації</string>
+    <string name="label_delay_ms">Затримка (мс)</string>
+    <string name="label_delay_range">10 – 5000</string>
+    <string name="label_delay_range_ms">10 – 5000 мс</string>
+    <string name="label_pattern">Патерн</string>
+    <string name="label_enabled">Увімкнено</string>
+    <string name="label_band_colours">Кольори смуг</string>
+
+    <!-- Patterns -->
+    <string name="pattern_solid">Статичний</string>
+    <string name="pattern_jump_rgb">Стрибок RGB</string>
+    <string name="pattern_jump_all">Стрибок усіх</string>
+    <string name="pattern_fade_rgb">Згасання RGB</string>
+    <string name="pattern_fade_all">Згасання усіх</string>
+    <string name="pattern_crossfade_red">Плавний перехід червоного</string>
+    <string name="pattern_crossfade_green_blue">Плавний перехід зеленого та синього</string>
+    <string name="pattern_crossfade_blue_orange">Плавний перехід синього та помаранчевого</string>
+    <string name="pattern_crossfade_blue">Плавний перехід синього</string>
+    <string name="pattern_crossfade_white">Плавний перехід білого</string>
+    <string name="pattern_flash_rgb">Спалах RGB</string>
+    <string name="pattern_flash_all">Спалах усіх</string>
+    <string name="pattern_strobe_white">Стробоскоп білий</string>
+
+    <!-- Accessibility & Misc -->
+    <string name="cd_toggle_power">Перемкнути живлення</string>
+    <string name="cd_open_colour_picker">Відкрити палітру кольорів</string>
+    <string name="msg_pick_colour">Виберіть колір</string>
+    <!-- Sync Colours -->
+    <string name="color_off">Вимк.</string>
+    <string name="color_red">Червоний</string>
+    <string name="color_orange">Помаранчевий</string>
+    <string name="color_yellow">Жовтий</string>
+    <string name="color_green">Зелений</string>
+    <string name="color_cyan">Блакитний</string>
+    <string name="color_blue">Синій</string>
+    <string name="color_violet">Фіолетовий</string>
+    <string name="color_magenta">Пурпуровий</string>
+    <string name="color_pink">Рожевий</string>
+    <string name="color_white">Білий</string>
+</resources>

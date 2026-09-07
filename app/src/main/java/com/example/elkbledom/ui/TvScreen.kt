@@ -703,7 +703,7 @@ private fun TvPatternItem(
             Spacer(Modifier.size(20.dp))
         }
         Text(
-            pattern.displayName,
+            stringResource(pattern.displayNameRes),
             style = MaterialTheme.typography.bodyLarge,
             fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Normal,
             color = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
