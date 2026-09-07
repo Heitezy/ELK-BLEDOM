@@ -117,7 +117,12 @@ class MainActivity : ComponentActivity() {
     private val permLauncher = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) { results ->
-        permissionsGranted = results.values.all { it }
+        // POST_NOTIFICATIONS is cosmetic (it only controls whether the Music
+        // Sync foreground-service notification is visible) — don't let a
+        // denial of it block Bluetooth/mic functionality.
+        permissionsGranted = results
+            .filterKeys { it != Manifest.permission.POST_NOTIFICATIONS }
+            .values.all { it }
         if (permissionsGranted) checkBluetooth()
     }
 
@@ -189,6 +194,12 @@ class MainActivity : ComponentActivity() {
                 add(Manifest.permission.ACCESS_FINE_LOCATION)
             }
             add(Manifest.permission.RECORD_AUDIO)
+            // Needed to show the "Music Sync" foreground-service notification;
+            // without it the mic capture service still runs, it just won't be
+            // visible in the status bar/notification shade.
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                add(Manifest.permission.POST_NOTIFICATIONS)
+            }
         }
         permLauncher.launch(perms.toTypedArray())
     }

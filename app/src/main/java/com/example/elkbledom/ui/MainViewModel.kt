@@ -3,10 +3,13 @@ package com.example.elkbledom.ui
 import android.app.Application
 import android.bluetooth.BluetoothDevice
 import android.content.Context
+import android.content.Intent
 import android.media.projection.MediaProjection
 import android.os.Build
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.elkbledom.MicCaptureService
 import com.example.elkbledom.audio.AudioAnalyzer
 import com.example.elkbledom.audio.FrequencyData
 import com.example.elkbledom.ble.BleManager
@@ -89,6 +92,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     private var musicSyncJob: Job? = null
     private var screenSyncJob: Job? = null
     private var patternJob: Job? = null
+    private var isMicServiceRunning = false
 
     // Delay read dynamically each iteration so typing a new value takes effect immediately
     private val holdMs get() = _ui.value.patternSpeedMs.coerceAtLeast(10L)
@@ -404,12 +408,24 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
     private fun startMusicSync() {
         musicSyncJob?.cancel()
-        musicSyncJob = viewModelScope.launch {
-            val flow = if (
-                _ui.value.audioMode == AudioMode.PLAYBACK &&
+
+        // Whether this run will actually read from the microphone (as opposed to
+        // internal-playback capture via MediaProjection).
+        val usingMic = !(
+            _ui.value.audioMode == AudioMode.PLAYBACK &&
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&
                 mediaProjection != null
-            ) {
+            )
+
+        if (usingMic) {
+            startMicCaptureService()
+        } else {
+            // Phone-Audio mode is covered by MediaProjectionService instead.
+            stopMicCaptureService()
+        }
+
+        musicSyncJob = viewModelScope.launch {
+            val flow = if (!usingMic) {
                 AudioAnalyzer.streamPlayback(mediaProjection!!)
             } else {
                 AudioAnalyzer.streamMic()
@@ -446,6 +462,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
             } catch (_: Exception) {
                 // AudioRecord unavailable (e.g. no microphone on this TV)
                 _ui.update { it.copy(isMusicSync = false) }
+                stopMicCaptureService()
             }
         }
     }
@@ -453,16 +470,39 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     private fun stopMusicSync() {
         musicSyncJob?.cancel()
         musicSyncJob = null
+        stopMicCaptureService()
         _ui.update { it.copy(freqData = FrequencyData(0f, 0f, 0f, false)) }
     }
 
     private fun restartMusicSync() { stopMusicSync(); startMusicSync() }
+
+    // ── Mic foreground service ───────────────────────────────────────────────
+    // Keeps mic-mode Music Sync (AudioRecord read + BLE writes) alive when the
+    // app is minimized: it raises the process's priority so Android doesn't
+    // kill it under memory pressure, and it keeps microphone access granted
+    // while there's no visible Activity (both are OS-level restrictions on
+    // background apps starting with Android 9+).
+
+    private fun startMicCaptureService() {
+        if (isMicServiceRunning) return
+        val app: Application = getApplication()
+        ContextCompat.startForegroundService(app, Intent(app, MicCaptureService::class.java))
+        isMicServiceRunning = true
+    }
+
+    private fun stopMicCaptureService() {
+        if (!isMicServiceRunning) return
+        val app: Application = getApplication()
+        app.stopService(Intent(app, MicCaptureService::class.java))
+        isMicServiceRunning = false
+    }
 
     private fun send(cmd: ByteArray) = bleManager.sendCommand(cmd)
 
     override fun onCleared() {
         super.onCleared()
         stopPatternLoop()
+        stopMicCaptureService()
         mediaProjection?.stop()
         bleManager.disconnect()
     }

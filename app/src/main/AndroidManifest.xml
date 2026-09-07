@@ -25,6 +25,11 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <!-- mediaProjection foreground service type (API 34+) -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION" />
+    <!-- microphone foreground service type (API 34+) — keeps mic-mode Music Sync
+         running and mic access granted while the app is minimized -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE" />
+    <!-- Needed to actually display the persistent Music Sync notification (API 33+) -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <uses-feature android:name="android.hardware.bluetooth_le" android:required="true" />
 
@@ -61,6 +66,12 @@
         <service
             android:name=".MediaProjectionService"
             android:foregroundServiceType="mediaProjection"
+            android:exported="false" />
+
+        <!-- Keeps microphone-mode Music Sync running while the app is minimized -->
+        <service
+            android:name=".MicCaptureService"
+            android:foregroundServiceType="microphone"
             android:exported="false" />
 
     </application>
