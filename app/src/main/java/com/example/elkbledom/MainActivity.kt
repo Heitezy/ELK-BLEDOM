@@ -95,7 +95,9 @@ class MainActivity : ComponentActivity() {
         if (result.resultCode == RESULT_OK && result.data != null) {
             pendingResult = result
             // Start the foreground service first; getMediaProjection() fires in onServiceConnected
-            val intent = Intent(this, MediaProjectionService::class.java)
+            val reason = if (viewModel.ui.value.isScreenSync)
+                MediaProjectionService.Reason.SCREEN else MediaProjectionService.Reason.PHONE_AUDIO
+            val intent = MediaProjectionService.intent(this, reason)
             startForegroundService(intent)
             bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
         } else {
@@ -142,20 +144,30 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Stop the projection service (and release the MediaProjection) whenever the
-        // user turns off music sync or switches back to mic mode.
+        // Keep the shared MediaProjectionService's notification accurate, and stop
+        // it (releasing the MediaProjection) once neither feature needs it anymore.
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                var wasCapturing = false
                 viewModel.ui
-                    .map { (it.isMusicSync && it.audioMode == AudioMode.PLAYBACK) || it.isScreenSync }
+                    .map { s ->
+                        when {
+                            s.isScreenSync -> MediaProjectionService.Reason.SCREEN
+                            s.isMusicSync && s.audioMode == AudioMode.PLAYBACK -> MediaProjectionService.Reason.PHONE_AUDIO
+                            else -> null
+                        }
+                    }
                     .distinctUntilChanged()
-                    .collect { isCapturing ->
-                        if (!isCapturing && wasCapturing) {
+                    .collect { reason ->
+                        if (reason != null) {
+                            // (Re)send the reason so the notification text matches what's
+                            // actually running — covers switching Phone-Audio Music Sync
+                            // <-> Screen Sync while the projection is already granted,
+                            // when the service itself is never restarted.
+                            startForegroundService(MediaProjectionService.intent(this@MainActivity, reason))
+                        } else {
                             stopService(Intent(this@MainActivity, MediaProjectionService::class.java))
                             viewModel.releaseProjection()
                         }
-                        wasCapturing = isCapturing
                     }
             }
         }
