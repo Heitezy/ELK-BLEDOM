@@ -276,7 +276,14 @@ Every non-Solid pattern runs as a coroutine loop in the ViewModel, sending `setC
 
 ### Screen capture
 
-`ScreenAnalyzer` creates a `VirtualDisplay` at 160 px wide via MediaProjection, reads `RGBA_8888` frames through an `ImageReader`, samples every 4th pixel, and computes a saturation-weighted average colour. Exponential smoothing (α = 0.07 for smooth mode, 0.25 for snappy) blends consecutive frames.
+`ScreenAnalyzer` creates a `VirtualDisplay` at 160 px wide via MediaProjection and reads `RGBA_8888` frames through an `ImageReader` at a 20 FPS cap (sampling every 4th pixel). To avoid inaccurate colours and muddy results from simple RGB averaging:
+
+1. **Linear-Light Conversion:** Encoded sRGB pixels are converted to linear light using a precomputed lookup table before any blending occurs, preventing the mid-grey shift and desaturation typical of raw byte averaging.
+2. **Dominant-Hue Histogram:** Saturated pixels are grouped into 24 narrow hue bins (15° each). The histogram is circularly smoothed across neighbouring bins to prevent noise at bin edges.
+3. **HSV Re-grading:** If a dominant hue satisfies the minimum colour share threshold (2%), it is selected and re-graded. Its saturation is boosted by 1.25× (compensating for diffuse LED strips versus emissive screens), and its value is blended 50% with the overall scene brightness to ensure dark scenes stay dim.
+4. **Neutral Fallback:** If no single hue dominates (e.g., text-heavy white UIs or black loading screens), it falls back gracefully to a neutral tone matched to the scene's actual overall linear-light brightness.
+
+Exponential smoothing (α = 0.07 for smooth mode, 0.25 for snappy) is applied to the final colours to blend consecutive frames.
 
 ---
 
