@@ -2,7 +2,6 @@ package com.example.elkbledom.ui
 
 import android.app.Application
 import android.bluetooth.BluetoothDevice
-import android.content.Context
 import android.content.Intent
 import android.media.projection.MediaProjection
 import android.os.Build
@@ -13,11 +12,11 @@ import com.example.elkbledom.MicCaptureService
 import com.example.elkbledom.R
 import com.example.elkbledom.audio.AudioAnalyzer
 import com.example.elkbledom.audio.FrequencyData
-import com.example.elkbledom.ble.BleManager
 import com.example.elkbledom.ble.ConnectionState
 import com.example.elkbledom.ble.ELKBledomProtocol
-import com.example.elkbledom.ble.ProtocolVariant
 import com.example.elkbledom.ble.LedPattern
+import com.example.elkbledom.ble.LedRepository
+import com.example.elkbledom.ble.ProtocolVariant
 import com.example.elkbledom.ble.ScannedDevice
 import com.example.elkbledom.screen.ScreenAnalyzer
 import kotlinx.coroutines.Job
@@ -73,18 +72,17 @@ data class UiState(
 
 class MainViewModel(app: Application) : AndroidViewModel(app) {
 
-    val bleManager = BleManager(app)
+    private val repository = LedRepository.getInstance(app)
+    val bleManager = repository.bleManager
 
-    private val _ui = MutableStateFlow(UiState())
+    private val _ui = MutableStateFlow(UiState(isPoweredOn = repository.isPoweredOn.value))
     val ui: StateFlow<UiState> = _ui.asStateFlow()
 
     private val _projectionRequest = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
     val projectionRequest: SharedFlow<Unit> = _projectionRequest.asSharedFlow()
 
     private var lastDevice: BluetoothDevice? = null
-    private val prefs = app.getSharedPreferences("elkbledom_prefs", Context.MODE_PRIVATE)
     private var mediaProjection: MediaProjection? = null
-    private var connectJob: Job? = null
     private var musicSyncJob: Job? = null
     private var screenSyncJob: Job? = null
     private var patternJob: Job? = null
@@ -95,6 +93,11 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     private val fadeStepMs get() = _ui.value.patternSpeedMs.coerceAtLeast(10L)
 
     init {
+        viewModelScope.launch {
+            repository.isPoweredOn.collect { on ->
+                _ui.update { it.copy(isPoweredOn = on) }
+            }
+        }
         viewModelScope.launch {
             bleManager.connectionState.collect { state ->
                 _ui.update { it.copy(connectionState = state) }
@@ -121,37 +124,25 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
     fun connectTo(device: BluetoothDevice) {
         lastDevice = device
-        prefs.edit().putString("last_device_address", device.address).apply()
-        connectJob?.cancel()
-        connectJob = viewModelScope.launch { bleManager.connect(device) }
+        repository.connectTo(device)
     }
 
     fun reconnectIfNeeded() {
-        val state = _ui.value.connectionState
-        if (state != ConnectionState.DISCONNECTED && state != ConnectionState.ERROR) return
-        val device = lastDevice
-            ?: prefs.getString("last_device_address", null)
-                ?.let { bleManager.getDeviceByAddress(it) }
-            ?: return
-        connectTo(device)
+        repository.reconnectIfNeeded()
     }
 
     fun disconnect() {
         lastDevice = null
-        prefs.edit().remove("last_device_address").apply()
+        repository.disconnect()
         stopPatternLoop()
         stopMusicSync()
         stopScreenSync()
-        bleManager.disconnect()
     }
 
     // ── Power ─────────────────────────────────────────────────────────────────
 
     fun togglePower() {
-        val on = !_ui.value.isPoweredOn
-        _ui.update { it.copy(isPoweredOn = on) }
-        val variant = bleManager.protocolVariant.value
-        send(if (on) ELKBledomProtocol.powerOn(variant) else ELKBledomProtocol.powerOff(variant))
+        repository.togglePower()
     }
 
     // ── Brightness ────────────────────────────────────────────────────────────

@@ -86,6 +86,7 @@
 
     <!-- Accessibility & Misc -->
     <string name="cd_toggle_power">Перемкнути живлення</string>
+    <string name="led_tile_label">Живлення LED</string>
     <string name="cd_open_colour_picker">Відкрити палітру кольорів</string>
     <string name="msg_pick_colour">Виберіть колір</string>
     <!-- Sync Colours -->
